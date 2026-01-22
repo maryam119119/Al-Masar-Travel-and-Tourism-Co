@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+
+class BookingFormDialog extends StatefulWidget {
+  final String tourName;
+  const BookingFormDialog({required this.tourName});
+
+  @override
+  State<BookingFormDialog> createState() => _BookingFormDialogState();
+}
+
+class _BookingFormDialogState extends State<BookingFormDialog> {
+  final _formKey = GlobalKey<FormState>();
+  String name = '', email = '', phone = '', message = '';
+
+  void submitForm() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Booking submitted!')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Book ${widget.tourName}'),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Name'),
+                onChanged: (val) => name = val,
+                validator: (val) => val!.isEmpty ? 'Enter name' : null,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Email'),
+                onChanged: (val) => email = val,
+                validator: (val) => val!.isEmpty ? 'Enter email' : null,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Phone'),
+                onChanged: (val) => phone = val,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Message'),
+                onChanged: (val) => message = val,
+                maxLines: 3,
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Cancel')),
+        ElevatedButton(onPressed: submitForm, child: Text('Submit')),
+      ],
+    );
+  }
+}
